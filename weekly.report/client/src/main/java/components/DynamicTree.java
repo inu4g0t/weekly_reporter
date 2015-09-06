@@ -55,40 +55,45 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import javafx.scene.Scene;
+import javafx.scene.web.HTMLEditor;
+import javafx.stage.Stage;
+import javafx.embed.swing.JFXPanel;
+import javafx.application.Platform;
 import po.Report;
 import docs.helper.TemplateElementReader;
 import docs.template.SimpleDocTemplate;
-
 
 public class DynamicTree extends JPanel {
 	protected TextMutableTreeNode rootNode;
 	protected Report treeModel;
 	protected JTree tree;
-	protected JEditorPane htmlPane;
+	// protected JEditorPane htmlPane;
+	protected HTMLEditor htmlPane;
 	protected SimpleDocTemplate doc;
 	private Toolkit toolkit = Toolkit.getDefaultToolkit();
 
+	@SuppressWarnings("restriction")
 	public DynamicTree() {
 		super(new GridLayout(1, 0));
-		
+
 		try {
 			TemplateElementReader modulerReader = new TemplateElementReader(
 					"mb.docx");
 			doc = new SimpleDocTemplate(modulerReader);
-//			simpleDoc.buildSampleDoc("sample.docx");
-//			NumberingExp.test("F:\\sample.docx");
+			// simpleDoc.buildSampleDoc("sample.docx");
+			// NumberingExp.test("F:\\sample.docx");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		//rootNode = new TextMutableTreeNode("Root Node");
+		// rootNode = new TextMutableTreeNode("Root Node");
 		treeModel = doc.getReport();
 		rootNode = doc.getRootNode();
-		//treeModel = new Report(rootNode);
+		// treeModel = new Report(rootNode);
 		treeModel.addTreeModelListener(new MyTreeModelListener());
 		tree = new JTree(treeModel);
 		tree.setEditable(true);
@@ -99,9 +104,20 @@ public class DynamicTree extends JPanel {
 
 		JScrollPane treeView = new JScrollPane(tree);
 
-		htmlPane = new JEditorPane();
-		htmlPane.setEditable(false);
-		JScrollPane htmlView = new JScrollPane(htmlPane);
+		// htmlPane = new JEditorPane();
+		// htmlPane.setEditable(false);
+
+		final JFXPanel fxPanel = new JFXPanel();
+		Platform.runLater(new Runnable() {
+			public void run() {
+				// javaFX operations should go here
+				htmlPane = new HTMLEditor();
+				Scene scene = new Scene(htmlPane);
+				fxPanel.setScene(scene);
+			}
+		});
+
+		JScrollPane htmlView = new JScrollPane(fxPanel);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitPane.setLeftComponent(treeView);
@@ -114,7 +130,7 @@ public class DynamicTree extends JPanel {
 		splitPane.setPreferredSize(new Dimension(800, 600));
 
 		add(splitPane);
-		
+
 	}
 
 	/** Remove all nodes except the root node. */
@@ -161,7 +177,7 @@ public class DynamicTree extends JPanel {
 			Object child) {
 		return addObject(parent, child, false, false);
 	}
-	
+
 	public TextMutableTreeNode addEssentialObject(TextMutableTreeNode parent,
 			Object child) {
 		return addObject(parent, child, false, true);
@@ -214,7 +230,7 @@ public class DynamicTree extends JPanel {
 		public void treeStructureChanged(TreeModelEvent e) {
 		}
 	}
-	
+
 	class MyTreeSelectionListener implements TreeSelectionListener {
 
 		public void valueChanged(TreeSelectionEvent arg0) {
@@ -227,10 +243,20 @@ public class DynamicTree extends JPanel {
 			} else {
 				node = (TextMutableTreeNode) (parentPath.getLastPathComponent());
 			}
-			htmlPane.setText(node.getText());
-			htmlPane.setEditable(true);
+			String node_text = node.getText();
+			if (node_text == null) {
+				node_text = "";
+			}
+			final String node_text_final = node_text;
+			Platform.runLater(new Runnable() {
+				public void run() {
+					htmlPane.setHtmlText(node_text_final);
+				}
+			});
+			// htmlPane.setHtmlText(node_text);
+			// htmlPane.setEditable(true);
 		}
-		
+
 	}
 
 	public TextMutableTreeNode saveText() {
@@ -243,7 +269,7 @@ public class DynamicTree extends JPanel {
 		} else {
 			node = (TextMutableTreeNode) (parentPath.getLastPathComponent());
 		}
-		return saveText(node, htmlPane.getText());
+		return saveText(node, htmlPane.getHtmlText());
 	}
 
 	protected TextMutableTreeNode saveText(TextMutableTreeNode node, String text) {
@@ -263,9 +289,19 @@ public class DynamicTree extends JPanel {
 		}
 		return restoreText(node);
 	}
-	
+
 	protected TextMutableTreeNode restoreText(TextMutableTreeNode node) {
-		htmlPane.setText(node.getText());
+		//htmlPane.setHtmlText(node.getText());
+		String node_text = node.getText();
+		if (node_text == null) {
+			node_text = "";
+		}
+		final String node_text_final = node_text;
+		Platform.runLater(new Runnable() {
+			public void run() {
+				htmlPane.setHtmlText(node_text_final);
+			}
+		});
 		return node;
 	}
 
