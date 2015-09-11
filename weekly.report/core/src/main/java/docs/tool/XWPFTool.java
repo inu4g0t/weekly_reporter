@@ -11,6 +11,10 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.exceptions.InvalidFormatException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.AltChunkType;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPPr;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRPr;
 
@@ -47,22 +51,37 @@ public class XWPFTool {
 	}
 	
 	public static void addHtmlToDoc(XWPFDocument doc, String htmlString){
-		ByteArrayInputStream is = new ByteArrayInputStream(htmlString.getBytes());
+//		ByteArrayInputStream is = new ByteArrayInputStream(htmlString.getBytes());
+//		try {
+//			XWPFDocument tmpDoc = new XWPFDocument(is);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		File outputFile = new File("sample_op.docx");
+//		try {
+//			FileOutputStream fos = new FileOutputStream(outputFile);
+//			doc.write(fos);
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		WordprocessingMLPackage wordMLPackage;
 		try {
-			XWPFDocument tmpDoc = new XWPFDocument(is);
-		} catch (IOException e) {
+			wordMLPackage = WordprocessingMLPackage.createPackage();
+			wordMLPackage.getMainDocumentPart().addAltChunk(AltChunkType.Html, htmlString.getBytes()); 
+
+			wordMLPackage.save(new java.io.File("test.docx"));
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Docx4JException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		File outputFile = new File("sample_op.docx");
-		try {
-			FileOutputStream fos = new FileOutputStream(outputFile);
-			doc.write(fos);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		
 		
 	}
 }
