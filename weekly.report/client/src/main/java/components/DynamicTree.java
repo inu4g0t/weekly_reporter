@@ -40,6 +40,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.io.FileNotFoundException;
+import java.math.BigInteger;
 
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
@@ -55,47 +56,49 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import org.docx4j.wml.P;
+import org.docx4j.wml.PPrBase.NumPr;
+import org.docx4j.wml.PPrBase.NumPr.Ilvl;
+import org.docx4j.wml.PPrBase.NumPr.NumId;
+
 import javafx.scene.Scene;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 import javafx.embed.swing.JFXPanel;
 import javafx.application.Platform;
 import po.Report;
+import docs.generator.Docx4jDocxGenerator;
 import docs.helper.TemplateElementReader;
 import docs.template.SimpleDocTemplate;
 
 public class DynamicTree extends JPanel {
+	
+	private static String IMPORTANT_CHANGSE = "重要项目产出";
+	private static String OTHER_PROJECTS = "其他项目";
+	
 	protected TextMutableTreeNode rootNode;
-	protected Report treeModel;
+	protected Report report;
 	protected JTree tree;
 	// protected JEditorPane htmlPane;
 	protected HTMLEditor htmlPane;
-	protected SimpleDocTemplate doc;
 	private Toolkit toolkit = Toolkit.getDefaultToolkit();
-
+	
 	@SuppressWarnings("restriction")
 	public DynamicTree() {
 		super(new GridLayout(1, 0));
 
-		try {
-			TemplateElementReader modulerReader = new TemplateElementReader(
-					"mb.docx");
-			doc = new SimpleDocTemplate(modulerReader);
-			// simpleDoc.buildSampleDoc("sample.docx");
-			// NumberingExp.test("F:\\sample.docx");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		rootNode = new TextMutableTreeNode("运营产品研发团队周报");
+		report = new Report(rootNode);
 
+		TextMutableTreeNode ic = insertEssentialChildToParent(null,
+				IMPORTANT_CHANGSE);
+		TextMutableTreeNode op = insertEssentialChildToParent(null,
+				OTHER_PROJECTS);
 		// rootNode = new TextMutableTreeNode("Root Node");
-		treeModel = doc.getReport();
-		rootNode = doc.getRootNode();
+
 		// treeModel = new Report(rootNode);
-		treeModel.addTreeModelListener(new MyTreeModelListener());
-		tree = new JTree(treeModel);
+		report.addTreeModelListener(new MyTreeModelListener());
+		tree = new JTree(report);
 		tree.setEditable(true);
 		tree.getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -136,7 +139,7 @@ public class DynamicTree extends JPanel {
 	/** Remove all nodes except the root node. */
 	public void clear() {
 		rootNode.removeAllChildren();
-		treeModel.reload();
+		report.reload();
 	}
 
 	/** Remove the currently selected node. */
@@ -147,7 +150,7 @@ public class DynamicTree extends JPanel {
 					.getLastPathComponent());
 			MutableTreeNode parent = (MutableTreeNode) (currentNode.getParent());
 			if (parent != null) {
-				treeModel.removeNodeFromParent(currentNode);
+				report.removeNodeFromParent(currentNode);
 				return;
 			}
 		}
@@ -193,7 +196,7 @@ public class DynamicTree extends JPanel {
 
 		// It is key to invoke this on the TreeModel, and NOT
 		// TextMutableTreeNode
-		treeModel.insertNodeInto(childNode, parent, parent.getChildCount());
+		report.insertNodeInto(childNode, parent, parent.getChildCount());
 
 		// Make sure the user can see the lovely new node.
 		if (shouldBeVisible) {
@@ -306,8 +309,23 @@ public class DynamicTree extends JPanel {
 	}
 
 	public void export() {
-		// TODO Auto-generated method stub
-		doc.parseReport(treeModel);
-		doc.writeToWord("output.docx");
+		
+		Docx4jDocxGenerator docGenerator = new Docx4jDocxGenerator();
+		docGenerator.exportReportToDocx(report, "output.docx");
+	}
+	
+	private TextMutableTreeNode insertEssentialChildToParent(
+			TextMutableTreeNode parent, Object child) {
+		TextMutableTreeNode childNode = new TextMutableTreeNode(child, true);
+
+		if (parent == null) {
+			parent = rootNode;
+		}
+
+		// It is key to invoke this on the TreeModel, and NOT
+		// TextMutableTreeNode
+		report.insertNodeInto(childNode, parent, parent.getChildCount());
+
+		return childNode;
 	}
 }

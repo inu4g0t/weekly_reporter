@@ -7,6 +7,8 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
+import components.TextMutableTreeNode;
+
 public class Report extends DefaultTreeModel implements Serializable {
 	
 	public Report(TreeNode root) {
@@ -40,5 +42,14 @@ public class Report extends DefaultTreeModel implements Serializable {
 
 	public void setReportString(String reportString) {
 		this.reportString = reportString;
+	}
+	
+	public String getTitle() {
+		if (!(root instanceof TextMutableTreeNode)) {
+			return "Title";
+		}
+		TextMutableTreeNode rootNode = (TextMutableTreeNode)root;
+		return (String)rootNode.getUserObject();
+		
 	}
 }

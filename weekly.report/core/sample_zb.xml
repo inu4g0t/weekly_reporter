@@ -8,7 +8,7 @@
                     <w:sz w:val="20"/>
                 </w:rPr>
             </w:pPr>
-            <w:bookmarkStart w:name="_GoBack" w:id="0"/>
+            <w:bookmarkStart w:name="_GoBack" w:id="0" />
         </w:p>
         <w:tbl>
             <w:tblPr>
@@ -43,31 +43,13 @@
                                 <w:shd w:val="clear" w:color="auto" w:fill="66CCFF"/>
                             </w:rPr>
                         </w:pPr>
-                        <w:bookmarkStart w:name="_xx团队周报" w:id="1"/>
-                        <w:bookmarkEnd w:id="1"/>
                         <w:r w:rsidRPr="006B46B6">
                             <w:rPr>
                                 <w:rFonts w:hint="eastAsia" w:ascii="微软雅黑" w:hAnsi="微软雅黑" w:eastAsia="微软雅黑"/>
                                 <w:sz w:val="20"/>
                                 <w:shd w:val="clear" w:color="auto" w:fill="66CCFF"/>
                             </w:rPr>
-                            <w:t>通信增值平台</w:t>
-                        </w:r>
-                        <w:r w:rsidRPr="0007771A" w:rsidR="00F82BD7">
-                            <w:rPr>
-                                <w:rFonts w:hint="eastAsia" w:ascii="微软雅黑" w:hAnsi="微软雅黑" w:eastAsia="微软雅黑"/>
-                                <w:sz w:val="20"/>
-                                <w:shd w:val="clear" w:color="auto" w:fill="66CCFF"/>
-                            </w:rPr>
-                            <w:t>团队</w:t>
-                        </w:r>
-                        <w:r w:rsidRPr="0007771A" w:rsidR="009E1672">
-                            <w:rPr>
-                                <w:rFonts w:hint="eastAsia" w:ascii="微软雅黑" w:hAnsi="微软雅黑" w:eastAsia="微软雅黑"/>
-                                <w:sz w:val="20"/>
-                                <w:shd w:val="clear" w:color="auto" w:fill="66CCFF"/>
-                            </w:rPr>
-                            <w:t>周报</w:t>
+                            <w:t>TITLE_FOR_REPLACE</w:t>
                         </w:r>
                     </w:p>
                 </w:tc>
