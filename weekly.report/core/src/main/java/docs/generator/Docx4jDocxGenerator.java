@@ -24,10 +24,13 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.AltChunkType;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.openpackaging.parts.WordprocessingML.NumberingDefinitionsPart;
+import org.docx4j.wml.BooleanDefaultTrue;
+import org.docx4j.wml.HpsMeasure;
 import org.docx4j.wml.Numbering;
 import org.docx4j.wml.P;
 import org.docx4j.wml.PPr;
 import org.docx4j.wml.PPrBase.Ind;
+import org.docx4j.wml.RPr;
 import org.docx4j.wml.Tbl;
 import org.docx4j.wml.PPrBase.NumPr;
 import org.docx4j.wml.PPrBase.NumPr.Ilvl;
@@ -160,7 +163,7 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 		return title;
 	}
 
-	private static P createNumberedParagraph(long numId, long ilvl,
+	private P createNumberedParagraph(long numId, long ilvl,
 			String paragraphText) {
 
 		P p = factory.createP();
@@ -168,14 +171,28 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 		org.docx4j.wml.Text t = factory.createText();
 		t.setValue(paragraphText);
 
-		org.docx4j.wml.R run = factory.createR();
+		org.docx4j.wml.R run = factory.createR();		
 		run.getContent().add(t);
+		
+		RPr rpr = factory.createRPr();
+		rpr.setB(new BooleanDefaultTrue());;
+		run.setRPr(rpr);
+		HpsMeasure kernVal = new HpsMeasure();
+		kernVal.setVal(BigInteger.valueOf(44));
+		rpr.setKern(kernVal);
+		HpsMeasure szVal = new HpsMeasure();
+		szVal.setVal(BigInteger.valueOf(20));
+		rpr.setSz(szVal);
 
 		p.getContent().add(run);
 
 		org.docx4j.wml.PPr ppr = factory.createPPr();
+		
 		p.setPPr(ppr);
 
+		
+		
+		
 		// Create and add <w:numPr>
 		NumPr numPr = factory.createPPrBaseNumPr();
 		ppr.setNumPr(numPr);
