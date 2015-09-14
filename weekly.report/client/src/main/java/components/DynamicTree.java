@@ -77,6 +77,7 @@ public class DynamicTree extends JPanel {
 	private static String OTHER_PROJECTS = "其他项目";
 	
 	protected TextMutableTreeNode rootNode;
+	protected TextMutableTreeNode lastNode;
 	protected Report report;
 	protected JTree tree;
 	// protected JEditorPane htmlPane;
@@ -88,6 +89,7 @@ public class DynamicTree extends JPanel {
 		super(new GridLayout(1, 0));
 
 		rootNode = new TextMutableTreeNode("运营产品研发团队周报");
+		lastNode = null;
 		report = new Report(rootNode);
 
 		TextMutableTreeNode ic = insertEssentialChildToParent(null,
@@ -220,8 +222,8 @@ public class DynamicTree extends JPanel {
 			int index = e.getChildIndices()[0];
 			node = (TextMutableTreeNode) (node.getChildAt(index));
 
-			System.out.println("The user has finished editing the node.");
-			System.out.println("New value: " + node.getUserObject());
+			// System.out.println("The user has finished editing the node.");
+			// System.out.println("New value: " + node.getUserObject());
 		}
 
 		public void treeNodesInserted(TreeModelEvent e) {
@@ -236,16 +238,25 @@ public class DynamicTree extends JPanel {
 
 	class MyTreeSelectionListener implements TreeSelectionListener {
 
+		@SuppressWarnings("restriction")
 		public void valueChanged(TreeSelectionEvent arg0) {
 			// TODO Auto-generated method stub
 			TextMutableTreeNode node = null;
 			TreePath parentPath = tree.getSelectionPath();
 
+			if (lastNode == null) {
+				lastNode = rootNode;
+			}
+			if (htmlPane.getHtmlText() != null && htmlPane.getHtmlText() != "") {
+				saveText(lastNode, htmlPane.getHtmlText());
+			}
+			
 			if (parentPath == null) {
 				node = rootNode;
 			} else {
 				node = (TextMutableTreeNode) (parentPath.getLastPathComponent());
 			}
+			lastNode = node;
 			String node_text = node.getText();
 			if (node_text == null) {
 				node_text = "";
