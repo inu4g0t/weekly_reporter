@@ -30,6 +30,7 @@ import org.docx4j.wml.Numbering;
 import org.docx4j.wml.P;
 import org.docx4j.wml.PPr;
 import org.docx4j.wml.PPrBase.Ind;
+import org.docx4j.wml.PPrBase.Spacing;
 import org.docx4j.wml.R;
 import org.docx4j.wml.RFonts;
 import org.docx4j.wml.RPr;
@@ -186,12 +187,12 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 		rpr.setB(new BooleanDefaultTrue());
 
 		run.setRPr(rpr);
-//		HpsMeasure kernVal = new HpsMeasure();
-//		kernVal.setVal(BigInteger.valueOf(44));
-//		rpr.setKern(kernVal);
-//		HpsMeasure szVal = new HpsMeasure();
-//		szVal.setVal(BigInteger.valueOf(20));
-//		rpr.setSz(szVal);
+		HpsMeasure kernVal = new HpsMeasure();
+		kernVal.setVal(BigInteger.valueOf(44));
+		rpr.setKern(kernVal);
+		HpsMeasure szVal = new HpsMeasure();
+		szVal.setVal(BigInteger.valueOf(20));
+		rpr.setSz(szVal);
 		RFonts rFonts = new RFonts();
 		rFonts.setAscii("微软雅黑");
 		rFonts.setHAnsi("微软雅黑");
@@ -201,7 +202,13 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 		p.getContent().add(run);
 
 		org.docx4j.wml.PPr ppr = factory.createPPr();
-
+		
+		Spacing sp = new Spacing();
+		sp.setBeforeLines(BigInteger.valueOf(50));
+		sp.setAfterLines(BigInteger.valueOf(50));
+		
+		ppr.setSpacing(sp);;
+		
 		p.setPPr(ppr);
 
 		// Create and add <w:numPr>
@@ -251,6 +258,9 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 						rFonts.setHAnsi("微软雅黑");
 						rFonts.setEastAsia("微软雅黑");
 						rpr.setRFonts(rFonts);
+						HpsMeasure szVal = new HpsMeasure();
+						szVal.setVal(BigInteger.valueOf(20));
+						rpr.setSz(szVal);
 					}
 				}
 			} else if (o instanceof Tbl) {

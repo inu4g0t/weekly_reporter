@@ -100,7 +100,7 @@ public class DynamicTree extends JPanel {
 	private Toolkit toolkit = Toolkit.getDefaultToolkit();
 	
 	private final JFileChooser fc = new JFileChooser();
-	private final Docx4jDocxGenerator docGenerator = new Docx4jDocxGenerator();
+	private Docx4jDocxGenerator docGenerator = null;
 	
 	@SuppressWarnings("restriction")
 	public DynamicTree() {
@@ -382,11 +382,14 @@ public class DynamicTree extends JPanel {
 		saveText();
 		
 		if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+			if (docGenerator == null) {
+				docGenerator = new Docx4jDocxGenerator();
+			}
 			docGenerator.exportReportToDocx(report, fc.getSelectedFile());
 			logger.debug("Export docx to " + fc.getSelectedFile().getAbsolutePath());
 		} else {
-			docGenerator.exportReportToDocx(report, "output.docx");
-			logger.error("Fail to get filepath from gui. Export docx to output.docx");
+			//docGenerator.exportReportToDocx(report, "output.docx");
+			logger.debug("Fail to get filepath from gui.");
 		}
 	}
 	

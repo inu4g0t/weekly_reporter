@@ -40,6 +40,7 @@
 						<w:rFonts w:hint="eastAsia" w:ascii="微软雅黑" w:hAnsi="微软雅黑"
 							w:eastAsia="微软雅黑" />
 						<w:sz w:val="20" />
+						<w:b/>
 						<w:shd w:val="clear" w:color="auto" w:fill="66CCFF" />
 					</w:rPr>
 					<w:t>TITLE_FOR_REPLACE</w:t>
