@@ -30,15 +30,15 @@
 					<w:ind w:right="-34" w:rightChars="-16" />
 					<w:jc w:val="center" />
 					<w:rPr>
-						<w:rFonts w:ascii="微软雅黑" w:hAnsi="微软雅黑" w:eastAsia="微软雅黑" />
+						<w:rFonts w:ascii="&#x5FAE;&#x8F6F;&#x96C5;&#x9ED1;" w:hAnsi="&#x5FAE;&#x8F6F;&#x96C5;&#x9ED1;" w:eastAsia="&#x5FAE;&#x8F6F;&#x96C5;&#x9ED1;" />
 						<w:sz w:val="20" />
 						<w:shd w:val="clear" w:color="auto" w:fill="66CCFF" />
 					</w:rPr>
 				</w:pPr>
 				<w:r w:rsidRPr="006B46B6">
 					<w:rPr>
-						<w:rFonts w:hint="eastAsia" w:ascii="微软雅黑" w:hAnsi="微软雅黑"
-							w:eastAsia="微软雅黑" />
+						<w:rFonts w:hint="eastAsia" w:ascii="&#x5FAE;&#x8F6F;&#x96C5;&#x9ED1;" w:hAnsi="&#x5FAE;&#x8F6F;&#x96C5;&#x9ED1;"
+							w:eastAsia="&#x5FAE;&#x8F6F;&#x96C5;&#x9ED1;" />
 						<w:sz w:val="20" />
 						<w:b/>
 						<w:shd w:val="clear" w:color="auto" w:fill="66CCFF" />

@@ -320,6 +320,7 @@ public class DynamicTree extends JPanel {
 	}
 	
 	public Report saveReport(File ouputFile) {
+		saveText();
 		try {
 			FileOutputStream fout = new FileOutputStream(ouputFile);
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
