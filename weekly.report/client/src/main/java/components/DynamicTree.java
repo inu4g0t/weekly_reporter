@@ -39,7 +39,13 @@ package components;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 
 import javax.swing.JEditorPane;
@@ -76,6 +82,8 @@ import docs.template.SimpleDocTemplate;
 
 public class DynamicTree extends JPanel {
 	
+	private static final String DEFAULT_REPORT_DATA_PATH = "report.data";
+
 	private static final Logger logger = LogManager.getLogger();
 	
 	private static String VISABLE_CHANGES = "可视化上线";
@@ -98,18 +106,7 @@ public class DynamicTree extends JPanel {
 	public DynamicTree() {
 		super(new GridLayout(1, 0));
 
-		rootNode = new TextMutableTreeNode("运营产品研发团队周报");
-		lastNode = null;
-		report = new Report(rootNode);
-
-		TextMutableTreeNode vc = insertEssentialChildToParent(null,
-				VISABLE_CHANGES);
-		TextMutableTreeNode ic = insertEssentialChildToParent(null,
-				IMPORTANT_CHANGSE);
-		TextMutableTreeNode op = insertEssentialChildToParent(null,
-				OTHER_PROJECTS);
-		TextMutableTreeNode is = insertEssentialChildToParent(null,
-				ISSUE);
+		this.loadReport(new File(DEFAULT_REPORT_DATA_PATH));
 		// rootNode = new TextMutableTreeNode("Root Node");
 
 		// treeModel = new Report(rootNode);
@@ -287,6 +284,54 @@ public class DynamicTree extends JPanel {
 
 	}
 
+	public Report loadReport(File inputFile) {
+		
+		FileInputStream fout;
+		try {
+			fout = new FileInputStream(inputFile);
+			ObjectInputStream oos = new ObjectInputStream(fout);
+			report = (Report) oos.readObject();
+			rootNode = (TextMutableTreeNode) report.getRoot();
+		} catch (FileNotFoundException e) {
+			rootNode = new TextMutableTreeNode("运营产品研发团队周报");
+			lastNode = null;
+			report = new Report(rootNode);
+
+			TextMutableTreeNode vc = insertEssentialChildToParent(null,
+					VISABLE_CHANGES);
+			TextMutableTreeNode ic = insertEssentialChildToParent(null,
+					IMPORTANT_CHANGSE);
+			TextMutableTreeNode op = insertEssentialChildToParent(null,
+					OTHER_PROJECTS);
+			TextMutableTreeNode is = insertEssentialChildToParent(null,
+					ISSUE);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return report;
+	}
+	
+	public Report saveReport() {
+		return saveReport(new File(DEFAULT_REPORT_DATA_PATH));
+	}
+	
+	public Report saveReport(File ouputFile) {
+		try {
+			FileOutputStream fout = new FileOutputStream(ouputFile);
+			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			oos.writeObject(report);
+			oos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return report;
+	}
+	
 	public TextMutableTreeNode saveText() {
 
 		TextMutableTreeNode node = null;

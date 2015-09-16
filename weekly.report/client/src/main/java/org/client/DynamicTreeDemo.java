@@ -137,7 +137,7 @@ public class DynamicTreeDemo extends JPanel
             //Clear button clicked.
             treePanel.clear();
         } else if(SAVE_COMMAND.equals(command)) {
-        	treePanel.saveText();
+        	treePanel.saveReport();
         } else if(CANCEL_COMMAND.equals(command)) {
         	treePanel.restoreText();
         } else if(EXPORT_COMMAND.equals(command)) {
