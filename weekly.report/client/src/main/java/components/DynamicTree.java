@@ -43,6 +43,7 @@ import java.io.FileNotFoundException;
 import java.math.BigInteger;
 
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -56,6 +57,8 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.docx4j.wml.P;
 import org.docx4j.wml.PPrBase.NumPr;
 import org.docx4j.wml.PPrBase.NumPr.Ilvl;
@@ -73,8 +76,12 @@ import docs.template.SimpleDocTemplate;
 
 public class DynamicTree extends JPanel {
 	
+	private static final Logger logger = LogManager.getLogger();
+	
+	private static String VISABLE_CHANGES = "可视化上线";
 	private static String IMPORTANT_CHANGSE = "重要项目产出";
 	private static String OTHER_PROJECTS = "其他项目";
+	private static String ISSUE = "ISSUE";
 	
 	protected TextMutableTreeNode rootNode;
 	protected TextMutableTreeNode lastNode;
@@ -84,6 +91,9 @@ public class DynamicTree extends JPanel {
 	protected HTMLEditor htmlPane;
 	private Toolkit toolkit = Toolkit.getDefaultToolkit();
 	
+	private final JFileChooser fc = new JFileChooser();
+	private final Docx4jDocxGenerator docGenerator = new Docx4jDocxGenerator();
+	
 	@SuppressWarnings("restriction")
 	public DynamicTree() {
 		super(new GridLayout(1, 0));
@@ -92,10 +102,14 @@ public class DynamicTree extends JPanel {
 		lastNode = null;
 		report = new Report(rootNode);
 
+		TextMutableTreeNode vc = insertEssentialChildToParent(null,
+				VISABLE_CHANGES);
 		TextMutableTreeNode ic = insertEssentialChildToParent(null,
 				IMPORTANT_CHANGSE);
 		TextMutableTreeNode op = insertEssentialChildToParent(null,
 				OTHER_PROJECTS);
+		TextMutableTreeNode is = insertEssentialChildToParent(null,
+				ISSUE);
 		// rootNode = new TextMutableTreeNode("Root Node");
 
 		// treeModel = new Report(rootNode);
@@ -320,9 +334,15 @@ public class DynamicTree extends JPanel {
 	}
 
 	public void export() {
+		saveText();
 		
-		Docx4jDocxGenerator docGenerator = new Docx4jDocxGenerator();
-		docGenerator.exportReportToDocx(report, "output.docx");
+		if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+			docGenerator.exportReportToDocx(report, fc.getSelectedFile());
+			logger.debug("Export docx to " + fc.getSelectedFile().getAbsolutePath());
+		} else {
+			docGenerator.exportReportToDocx(report, "output.docx");
+			logger.error("Fail to get filepath from gui. Export docx to output.docx");
+		}
 	}
 	
 	private TextMutableTreeNode insertEssentialChildToParent(

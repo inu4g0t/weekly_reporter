@@ -34,8 +34,8 @@
 		</w:lvl>
 		<w:lvl w:ilvl="2">
 			<w:start w:val="1" />
-			<w:numFmt w:val="bullet" />
-			<w:lvlText w:val="&#x26AB;" />
+			<w:numFmt w:val="lowerRoman" />
+			<w:lvlText w:val="%3)" />
 			<w:lvlJc w:val="left" />
 			<w:pPr>
 				<w:ind w:left="1080" w:hanging="360" />
@@ -43,8 +43,8 @@
 		</w:lvl>
 		<w:lvl w:ilvl="3">
 			<w:start w:val="1" />
-			<w:numFmt w:val="bullet" />
-			<w:lvlText w:val="&#x25CF;" />
+			<w:numFmt w:val="decimal" />
+			<w:lvlText w:val="(%4)" />
 			<w:lvlJc w:val="left" />
 			<w:pPr>
 				<w:ind w:left="1440" w:hanging="360" />
@@ -52,8 +52,8 @@
 		</w:lvl>
 		<w:lvl w:ilvl="4">
 			<w:start w:val="1" />
-			<w:numFmt w:val="bullet" />
-			<w:lvlText w:val="&#x27A3;" />
+			<w:numFmt w:val="lowerLetter" />
+			<w:lvlText w:val="(%5)" />
 			<w:lvlJc w:val="left" />
 			<w:pPr>
 				<w:ind w:left="1800" w:hanging="360" />
@@ -61,8 +61,8 @@
 		</w:lvl>
 		<w:lvl w:ilvl="5">
 			<w:start w:val="1" />
-			<w:numFmt w:val="bullet" />
-			<w:lvlText w:val="&#x27BA;" />
+			<w:numFmt w:val="lowerRoman" />
+			<w:lvlText w:val="(%6)" />
 			<w:lvlJc w:val="left" />
 			<w:pPr>
 				<w:ind w:left="2160" w:hanging="360" />

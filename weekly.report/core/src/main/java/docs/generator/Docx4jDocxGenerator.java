@@ -30,6 +30,8 @@ import org.docx4j.wml.Numbering;
 import org.docx4j.wml.P;
 import org.docx4j.wml.PPr;
 import org.docx4j.wml.PPrBase.Ind;
+import org.docx4j.wml.R;
+import org.docx4j.wml.RFonts;
 import org.docx4j.wml.RPr;
 import org.docx4j.wml.Tbl;
 import org.docx4j.wml.PPrBase.NumPr;
@@ -55,10 +57,9 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 	static final String defaultNumberingXML = "numbering.xml";
 
 	static final String defaultParagraphXML = "paragraph.xml";
-	
-	private final static String dtd = 
-            "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
-            + " \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
+
+	private final static String dtd = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
+			+ " \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
 
 	private String titleXMLTemplate;
 	private String numberingXML;
@@ -78,6 +79,10 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 	}
 
 	public void exportReportToDocx(Report r, String outputPath) {
+		exportReportToDocx(r, new java.io.File(outputPath));
+	}
+
+	public void exportReportToDocx(Report r, File outputFile) {
 
 		try {
 			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
@@ -94,7 +99,7 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 			parseNode(wordMLPackage, (TextMutableTreeNode) r.getRoot());
 			// Add title
 
-			wordMLPackage.save(new java.io.File(outputPath));
+			wordMLPackage.save(outputFile);
 
 		} catch (JAXBException e) {
 			logger.error(e);
@@ -124,7 +129,10 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 							(String) node.getUserObject()));
 			break;
 		}
-		if (node.getText() != null && node.getText() != "") {
+		if (node.getText() != null
+				&& !node.getText().equals("")
+				&& !node.getText()
+						.equals("<html dir=\"ltr\"><head></head><body contenteditable=\"true\"></body></html>")) {
 			addHTMLParagraph(wordMLPackage, node.getLevel(), node.getText());
 		}
 		Enumeration<TextMutableTreeNode> childrenEnum = node.children();
@@ -171,28 +179,31 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 		org.docx4j.wml.Text t = factory.createText();
 		t.setValue(paragraphText);
 
-		org.docx4j.wml.R run = factory.createR();		
+		org.docx4j.wml.R run = factory.createR();
 		run.getContent().add(t);
-		
+
 		RPr rpr = factory.createRPr();
-		rpr.setB(new BooleanDefaultTrue());;
+		rpr.setB(new BooleanDefaultTrue());
+
 		run.setRPr(rpr);
-		HpsMeasure kernVal = new HpsMeasure();
-		kernVal.setVal(BigInteger.valueOf(44));
-		rpr.setKern(kernVal);
-		HpsMeasure szVal = new HpsMeasure();
-		szVal.setVal(BigInteger.valueOf(20));
-		rpr.setSz(szVal);
+//		HpsMeasure kernVal = new HpsMeasure();
+//		kernVal.setVal(BigInteger.valueOf(44));
+//		rpr.setKern(kernVal);
+//		HpsMeasure szVal = new HpsMeasure();
+//		szVal.setVal(BigInteger.valueOf(20));
+//		rpr.setSz(szVal);
+		RFonts rFonts = new RFonts();
+		rFonts.setAscii("微软雅黑");
+		rFonts.setHAnsi("微软雅黑");
+		rFonts.setEastAsia("微软雅黑");
+		rpr.setRFonts(rFonts);
 
 		p.getContent().add(run);
 
 		org.docx4j.wml.PPr ppr = factory.createPPr();
-		
+
 		p.setPPr(ppr);
 
-		
-		
-		
 		// Create and add <w:numPr>
 		NumPr numPr = factory.createPPrBaseNumPr();
 		ppr.setNumPr(numPr);
@@ -217,9 +228,9 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 		XHTMLImporterImpl XHTMLImporter = new XHTMLImporterImpl(wordMLPackage);
 
 		htmlParagraph = htmlParagraph.replaceAll("<br>", "<br/>");
-		
-		List<Object> importedObjects = XHTMLImporter.convert(dtd + htmlParagraph,
-				null);
+
+		List<Object> importedObjects = XHTMLImporter.convert(dtd
+				+ htmlParagraph, null);
 
 		for (Object o : importedObjects) {
 			if (o instanceof P) {
@@ -228,6 +239,20 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 				ind.setLeft(BigInteger.valueOf(360 * ilvl));
 				ppr.setInd(ind);
 				wordMLPackage.getMainDocumentPart().addObject(o);
+				for (Object c : ((P) o).getContent()) {
+					if (c instanceof R) {
+						RPr rpr = ((R) c).getRPr();
+						if (rpr == null) {
+							rpr = factory.createRPr();
+							((R) c).setRPr(rpr);
+						}
+						RFonts rFonts = new RFonts();
+						rFonts.setAscii("微软雅黑");
+						rFonts.setHAnsi("微软雅黑");
+						rFonts.setEastAsia("微软雅黑");
+						rpr.setRFonts(rFonts);
+					}
+				}
 			} else if (o instanceof Tbl) {
 				wordMLPackage.getMainDocumentPart().addObject(o);
 			} else {

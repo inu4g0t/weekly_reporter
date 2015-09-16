@@ -1,0 +1,50 @@
+<w:tbl mc:Ignorable="w14 w15 wp14" xmlns:dsp="http://schemas.microsoft.com/office/drawing/2008/diagram" xmlns:odx="http://opendope.org/xpaths" xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:odgm="http://opendope.org/SmartArt/DataHierarchy" xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture" xmlns:ns31="http://schemas.openxmlformats.org/drawingml/2006/compatibility" xmlns:ns30="http://schemas.openxmlformats.org/officeDocument/2006/bibliography" xmlns:ns9="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:ns12="http://schemas.openxmlformats.org/drawingml/2006/chartDrawing" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:ns32="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" xmlns:ns17="urn:schemas-microsoft-com:office:excel" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:oda="http://opendope.org/answers" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:odc="http://opendope.org/conditions" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:ns23="http://schemas.microsoft.com/office/2006/coverPageProps" xmlns:odi="http://opendope.org/components" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:ns21="urn:schemas-microsoft-com:office:powerpoint" xmlns:odq="http://opendope.org/questions">
+	<w:tblPr>
+		<w:tblW w:w="9180" w:type="dxa" />
+		<w:shd w:val="clear" w:color="auto" w:fill="66CCFF" />
+		<w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="1"
+			w:lastColumn="0" w:noHBand="0" w:noVBand="1" w:val="04A0" />
+	</w:tblPr>
+	<w:tblGrid>
+		<w:gridCol w:w="9180" />
+	</w:tblGrid>
+	<w:tr w:rsidRPr="0007771A" w:rsidR="005B56FF" w:rsidTr="00555280"
+		w14:paraId="6D765A2C" w14:textId="77777777">
+		<w:trPr>
+			<w:trHeight w:val="616" />
+		</w:trPr>
+		<w:tc>
+			<w:tcPr>
+				<w:tcW w:w="9180" w:type="dxa" />
+				<w:shd w:val="clear" w:color="auto" w:fill="66CCFF" />
+				<w:vAlign w:val="center" />
+			</w:tcPr>
+			<w:p w:rsidRPr="0007771A" w:rsidR="004B4B98" w:rsidP="007B1A10"
+				w:rsidRDefault="006B46B6" w14:paraId="043B2E92" w14:textId="29178AD3">
+				<w:pPr>
+					<w:pStyle w:val="10" />
+					<w:keepNext w:val="false" />
+					<w:snapToGrid w:val="false" />
+					<w:spacing w:before="0" w:after="0" w:line="240"
+						w:lineRule="auto" />
+					<w:ind w:right="-34" w:rightChars="-16" />
+					<w:jc w:val="center" />
+					<w:rPr>
+						<w:rFonts w:ascii="微软雅黑" w:hAnsi="微软雅黑" w:eastAsia="微软雅黑" />
+						<w:sz w:val="20" />
+						<w:shd w:val="clear" w:color="auto" w:fill="66CCFF" />
+					</w:rPr>
+				</w:pPr>
+				<w:r w:rsidRPr="006B46B6">
+					<w:rPr>
+						<w:rFonts w:hint="eastAsia" w:ascii="微软雅黑" w:hAnsi="微软雅黑"
+							w:eastAsia="微软雅黑" />
+						<w:sz w:val="20" />
+						<w:shd w:val="clear" w:color="auto" w:fill="66CCFF" />
+					</w:rPr>
+					<w:t>TITLE_FOR_REPLACE</w:t>
+				</w:r>
+			</w:p>
+		</w:tc>
+	</w:tr>
+</w:tbl>
