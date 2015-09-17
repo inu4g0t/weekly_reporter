@@ -44,6 +44,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import components.DynamicTree;
@@ -142,7 +143,9 @@ public class DynamicTreeDemo extends JPanel
         	treePanel.restoreText();
         } else if(EXPORT_COMMAND.equals(command)) {
         	treePanel.export();
+        	JOptionPane.showMessageDialog(this, "Export Finished");
         }
+        
     }
 
     /**
