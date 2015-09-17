@@ -41,9 +41,8 @@ import org.docx4j.wml.PPrBase.NumPr.NumId;
 import org.docx4j.wml.TblPr;
 import org.docx4j.wml.TblWidth;
 
-import components.TextMutableTreeNode;
-import docs.tool.XWPFTool;
-import po.Report;
+import po.NodeXML;
+import po.ReportXML;
 
 public class Docx4jDocxGenerator implements DocxGenerator {
 
@@ -79,11 +78,11 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 		}
 	}
 
-	public void exportReportToDocx(Report r, String outputPath) {
+	public void exportReportToDocx(ReportXML r, String outputPath) {
 		exportReportToDocx(r, new java.io.File(outputPath));
 	}
 
-	public void exportReportToDocx(Report r, File outputFile) {
+	public void exportReportToDocx(ReportXML r, File outputFile) {
 
 		try {
 			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
@@ -97,7 +96,7 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 
 			MainDocumentPart mainDoc = wordMLPackage.getMainDocumentPart();
 
-			parseNode(wordMLPackage, (TextMutableTreeNode) r.getRoot());
+			parseNode(wordMLPackage, (NodeXML) r.getRootNode());
 			// Add title
 
 			wordMLPackage.save(outputFile);
@@ -112,7 +111,7 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 	}
 
 	private void parseNode(WordprocessingMLPackage wordMLPackage,
-			TextMutableTreeNode node) throws Docx4JException {
+			NodeXML node) throws Docx4JException {
 		XWPFParagraph tmpPara;
 		switch (node.getLevel()) {
 		case 0:
@@ -136,10 +135,7 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 						.equals("<html dir=\"ltr\"><head></head><body contenteditable=\"true\"></body></html>")) {
 			addHTMLParagraph(wordMLPackage, node.getLevel(), node.getText());
 		}
-		Enumeration<TextMutableTreeNode> childrenEnum = node.children();
-		while (childrenEnum.hasMoreElements()) {
-			TextMutableTreeNode child = (TextMutableTreeNode) childrenEnum
-					.nextElement();
+		for (NodeXML child : node.getChildren()) {
 			parseNode(wordMLPackage, child);
 		}
 	}

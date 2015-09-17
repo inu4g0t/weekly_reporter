@@ -62,6 +62,9 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -75,14 +78,13 @@ import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 import javafx.embed.swing.JFXPanel;
 import javafx.application.Platform;
-import po.Report;
+import po.NodeXML;
+import po.ReportXML;
 import docs.generator.Docx4jDocxGenerator;
-import docs.helper.TemplateElementReader;
-import docs.template.SimpleDocTemplate;
 
 public class DynamicTree extends JPanel {
 	
-	private static final String DEFAULT_REPORT_DATA_PATH = "report.data";
+	private static final String DEFAULT_REPORT_DATA_PATH = "report.xml";
 
 	private static final Logger logger = LogManager.getLogger();
 	
@@ -106,7 +108,7 @@ public class DynamicTree extends JPanel {
 	public DynamicTree() {
 		super(new GridLayout(1, 0));
 
-		this.loadReport(new File(DEFAULT_REPORT_DATA_PATH));
+		report.loadReport(new File(DEFAULT_REPORT_DATA_PATH));
 		// rootNode = new TextMutableTreeNode("Root Node");
 
 		// treeModel = new Report(rootNode);
@@ -283,54 +285,10 @@ public class DynamicTree extends JPanel {
 		}
 
 	}
-
-	public Report loadReport(File inputFile) {
-		
-		FileInputStream fout;
-		try {
-			fout = new FileInputStream(inputFile);
-			ObjectInputStream oos = new ObjectInputStream(fout);
-			report = (Report) oos.readObject();
-			rootNode = (TextMutableTreeNode) report.getRoot();
-		} catch (FileNotFoundException e) {
-			rootNode = new TextMutableTreeNode("运营产品研发团队周报");
-			lastNode = null;
-			report = new Report(rootNode);
-
-			TextMutableTreeNode vc = insertEssentialChildToParent(null,
-					VISABLE_CHANGES);
-			TextMutableTreeNode ic = insertEssentialChildToParent(null,
-					IMPORTANT_CHANGSE);
-			TextMutableTreeNode op = insertEssentialChildToParent(null,
-					OTHER_PROJECTS);
-			TextMutableTreeNode is = insertEssentialChildToParent(null,
-					ISSUE);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return report;
-	}
 	
-	public Report saveReport() {
-		return saveReport(new File(DEFAULT_REPORT_DATA_PATH));
-	}
-	
-	public Report saveReport(File ouputFile) {
+	public void saveReport() {
 		saveText();
-		try {
-			FileOutputStream fout = new FileOutputStream(ouputFile);
-			ObjectOutputStream oos = new ObjectOutputStream(fout);
-			oos.writeObject(report);
-			oos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return report;
+		report.saveReport(new File(DEFAULT_REPORT_DATA_PATH));
 	}
 	
 	public TextMutableTreeNode saveText() {
@@ -386,7 +344,7 @@ public class DynamicTree extends JPanel {
 			if (docGenerator == null) {
 				docGenerator = new Docx4jDocxGenerator();
 			}
-			docGenerator.exportReportToDocx(report, fc.getSelectedFile());
+			docGenerator.exportReportToDocx(report.getReportXML(), fc.getSelectedFile());
 			logger.debug("Export docx to " + fc.getSelectedFile().getAbsolutePath());
 		} else {
 			//docGenerator.exportReportToDocx(report, "output.docx");
@@ -408,4 +366,18 @@ public class DynamicTree extends JPanel {
 
 		return childNode;
 	}
+	
+	private DefaultTreeModel getTreeFromReport(ReportXML r) {
+		TextMutableTreeNode rootNode = new TextMutableTreeNode(r.getRootNode().getUserObject());
+		return new DefaultTreeModel(rootNode);
+	}
+	
+	private void addNodeXML(TextMutableTreeNode parent, NodeXML child) {
+		TextMutableTreeNode c = new TextMutableTreeNode(child.getUserObject()); 
+		parent.insert(c, parent.getChildCount());
+		for (NodeXML gc : child.getChildren()) {
+			addNodeXML(c, gc);
+		}
+	}
+	
 }

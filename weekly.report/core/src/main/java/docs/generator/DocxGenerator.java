@@ -2,10 +2,10 @@ package docs.generator;
 
 import java.io.File;
 
-import po.Report;
+import po.ReportXML;
 
 public interface DocxGenerator {
-	public void exportReportToDocx(Report r, String outputPath);
+	public void exportReportToDocx(ReportXML r, String outputPath);
 	
-	public void exportReportToDocx(Report r, File outputFile);
+	public void exportReportToDocx(ReportXML r, File outputFile);
 }
