@@ -58,7 +58,7 @@ public class EditorPane extends SplitPane {
 		rootNode = new CustomTextTreeItem("root");
 		reportXML = new ReportXML();
 		initTreePane();
-		
+
 		this.setOrientation(Orientation.HORIZONTAL);
 		this.setDividerPosition(0, 0.4);
 		this.getItems().add(treePane);
@@ -79,7 +79,7 @@ public class EditorPane extends SplitPane {
 		lastNode = null;
 		this.loadReport(reportXMLFile);
 		initTreePane();
-		
+
 		this.setOrientation(Orientation.HORIZONTAL);
 		this.setDividerPosition(0, 0.4);
 		this.getItems().add(treePane);
@@ -93,7 +93,7 @@ public class EditorPane extends SplitPane {
 	private void initTreePane() {
 		initTreeView();
 		initControlPane();
-		
+
 		treePane = new SplitPane();
 		treePane.setDividerPosition(0, 0.95);
 		treePane.setOrientation(Orientation.VERTICAL);
@@ -207,7 +207,7 @@ public class EditorPane extends SplitPane {
 
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println("Move up");
+				moveNode(-1);
 			}
 		});
 		Button downButton = new Button();
@@ -216,7 +216,7 @@ public class EditorPane extends SplitPane {
 
 			@Override
 			public void handle(ActionEvent event) {
-
+				moveNode(1);
 			}
 		});
 		Button addButton = new Button();
@@ -257,6 +257,26 @@ public class EditorPane extends SplitPane {
 			htmlPane.setHtmlText(tr.getHtmlText());
 		}
 		lastNode = tr;
+	}
+
+	protected void moveNode(int moveStep) {
+		CustomTextTreeItem tr = (CustomTextTreeItem) treeView
+				.getSelectionModel().getSelectedItem();
+		int current = treeView.getSelectionModel().getSelectedIndex();
+		int dest = current + moveStep - 1;
+		if (dest < 0) {
+			dest = 0;
+		}
+		if (dest >= tr.getParent().getChildren().size()) {
+			dest = tr.getParent().getChildren().size() - 1;
+		}
+		if (tr != null && tr != rootNode) {
+			CustomTextTreeItem trParent = (CustomTextTreeItem) tr.getParent();
+			trParent.getChildren().remove(tr);
+			trParent.getChildren().add(dest, tr);
+			treeView.getSelectionModel().select(tr);
+		}
+
 	}
 
 	protected void clearNodes() {
