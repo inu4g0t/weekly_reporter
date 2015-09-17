@@ -41,7 +41,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.client.DynamicTreeDemo</mainClass>
+							<mainClass>javafx.client.WeeklyReporter</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
