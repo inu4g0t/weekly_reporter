@@ -118,7 +118,7 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 			wordMLPackage
 					.getMainDocumentPart()
 					.getContent()
-					.add(createTitleWithTemplate((String) node.getUserObject()));
+					.add(createTitleWithTemplate((String) node.getText()));
 			break;
 
 		default:
@@ -126,14 +126,14 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 					.getMainDocumentPart()
 					.getContent()
 					.add(createNumberedParagraph(1, node.getLevel() - 1,
-							(String) node.getUserObject()));
+							(String) node.getText()));
 			break;
 		}
-		if (node.getText() != null
-				&& !node.getText().equals("")
-				&& !node.getText()
+		if (node.getHtmlText() != null
+				&& !node.getHtmlText().equals("")
+				&& !node.getHtmlText()
 						.equals("<html dir=\"ltr\"><head></head><body contenteditable=\"true\"></body></html>")) {
-			addHTMLParagraph(wordMLPackage, node.getLevel(), node.getText());
+			addHTMLParagraph(wordMLPackage, node.getLevel(), node.getHtmlText());
 		}
 		for (NodeXML child : node.getChildren()) {
 			parseNode(wordMLPackage, child);

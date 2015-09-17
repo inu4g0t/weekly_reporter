@@ -20,38 +20,38 @@ public class NodeXML {
 		level = 0;
 	}
 	
-	public NodeXML(Object o) {
+	public NodeXML(String o) {
 		children = new ArrayList<NodeXML>();
-		userObject = o;
+		text = o;
 		level = 0;
 	}
 	
-	private Object userObject;
-
 	private NodeXML parent;
 
 	private List<NodeXML> children;
 	
 	private int level;
-
+	
 	private String text;
 	
+	private String htmlText;
+	
+	@XmlElement(name = "htmlText")
+	public String getHtmlText() {
+		return htmlText;
+	}
+
+	public void setHtmlText(String text) {
+		this.htmlText = text;
+	}
+
 	@XmlElement(name = "text")
 	public String getText() {
 		return text;
 	}
 
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	@XmlElement(name = "value")
-	public Object getUserObject() {
-		return userObject;
-	}
-
-	public void setUserObject(Object object) {
-		this.userObject = object;
+	public void setText(String object) {
+		this.text = object;
 	}
 
 	

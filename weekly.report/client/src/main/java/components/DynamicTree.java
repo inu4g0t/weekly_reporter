@@ -368,12 +368,12 @@ public class DynamicTree extends JPanel {
 	}
 	
 	private DefaultTreeModel getTreeFromReport(ReportXML r) {
-		TextMutableTreeNode rootNode = new TextMutableTreeNode(r.getRootNode().getUserObject());
+		TextMutableTreeNode rootNode = new TextMutableTreeNode(r.getRootNode().getText());
 		return new DefaultTreeModel(rootNode);
 	}
 	
 	private void addNodeXML(TextMutableTreeNode parent, NodeXML child) {
-		TextMutableTreeNode c = new TextMutableTreeNode(child.getUserObject()); 
+		TextMutableTreeNode c = new TextMutableTreeNode(child.getText()); 
 		parent.insert(c, parent.getChildCount());
 		for (NodeXML gc : child.getChildren()) {
 			addNodeXML(c, gc);

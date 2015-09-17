@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<report>
+    <rootNode>
+        <child>
+            <level>1</level>
+            <text>TestNode 1</text>
+        </child>
+        <htmlText>&lt;html dir="ltr"&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable="true"&gt;&lt;/body&gt;&lt;/html&gt;</htmlText>
+        <level>0</level>
+        <text>root</text>
+    </rootNode>
+</report>
