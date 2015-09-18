@@ -174,7 +174,8 @@ public class EditorPane extends SplitPane {
 						 */
 						Dragboard db = event.getDragboard();
 						boolean success = false;
-						if (db.hasString()) {
+						if (db.hasString() && treeCell != null
+								&& treeCell.getTreeItem() != null) {
 							TextFieldTreeCellImpl treeCellOld = (TextFieldTreeCellImpl) treeView
 									.lookup("#" + db.getString());
 							// System.out.println("from:" +
