@@ -43,7 +43,7 @@ public class CustomTextTreeItem extends TreeItem<String> implements
 		// TODO Auto-generated method stub
 		NodeXML root = new NodeXML();
 		root.setText(getValue());
-		root.setHtmlText(htmlText);
+		root.setHtmlText(getHtmlText());
 		for (TreeItem<String> c : this.getChildren()) {
 			root.addChild(((CustomTextTreeItem)c).exportNodeXML());
 		}

@@ -6,11 +6,11 @@
 	<parent>
 		<groupId>com.inu4g0t</groupId>
 		<artifactId>weekly.report</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.2-SNAPSHOT</version>
 	</parent>
 	<groupId>com.inu4g0t</groupId>
 	<artifactId>client</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>Client</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>com.inu4g0t</groupId>
 			<artifactId>core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.xml.bind</groupId>

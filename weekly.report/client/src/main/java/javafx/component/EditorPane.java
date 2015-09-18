@@ -54,8 +54,8 @@ public class EditorPane extends SplitPane {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		lastNode = null;
 		rootNode = new CustomTextTreeItem("root");
+		lastNode = rootNode;
 		reportXML = new ReportXML();
 		initTreePane();
 
@@ -63,6 +63,7 @@ public class EditorPane extends SplitPane {
 		this.setDividerPosition(0, 0.4);
 		this.getItems().add(treePane);
 		htmlPane = new HTMLEditor();
+		htmlPane.setHtmlText(rootNode.getHtmlText());
 		htmlPane.setPrefSize(480, 550);
 		this.getItems().add(htmlPane);
 		this.setPrefSize(800, 550);
@@ -76,14 +77,15 @@ public class EditorPane extends SplitPane {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		lastNode = null;
 		this.loadReport(reportXMLFile);
+		this.lastNode = rootNode;
 		initTreePane();
 
 		this.setOrientation(Orientation.HORIZONTAL);
 		this.setDividerPosition(0, 0.4);
 		this.getItems().add(treePane);
 		htmlPane = new HTMLEditor();
+		htmlPane.setHtmlText(rootNode.getHtmlText());
 		htmlPane.setPrefSize(480, 550);
 		this.getItems().add(htmlPane);
 		this.setPrefSize(800, 550);
@@ -104,6 +106,7 @@ public class EditorPane extends SplitPane {
 	private void initTreeView() {
 		treeView = new TreeView<String>(rootNode);
 		treeView.setPrefSize(300, 550);
+		treeView.getSelectionModel().select(rootNode);
 		scrollPane = new ScrollPane();
 		scrollPane.setContent(treeView);
 		treeView.setEditable(true);
@@ -117,10 +120,13 @@ public class EditorPane extends SplitPane {
 
 					@Override
 					public void handle(MouseEvent event) {
-						if (lastNode != null) {
-							lastNode.setHtmlText(htmlPane.getHtmlText());
+						saveHtmlText(lastNode);
+						CustomTextTreeItem tr = (CustomTextTreeItem) treeView
+								.getSelectionModel().getSelectedItem();
+						if (tr != null) {
+							htmlPane.setHtmlText(tr.getHtmlText());
 						}
-						saveHtmlText();
+						lastNode = tr;
 					}
 
 				});
@@ -249,12 +255,16 @@ public class EditorPane extends SplitPane {
 				clearButton, upButton, downButton);
 	}
 
-	private void saveHtmlText() {
+	private void saveHtmlText(CustomTextTreeItem tr) {
+		if (tr != null) {
+			tr.setHtmlText(htmlPane.getHtmlText());
+		}
+	}
+
+	private void saveCurrentHtmlText() {
 		CustomTextTreeItem tr = (CustomTextTreeItem) treeView
 				.getSelectionModel().getSelectedItem();
-		if (tr != null) {
-			htmlPane.setHtmlText(tr.getHtmlText());
-		}
+		saveHtmlText(tr);
 		lastNode = tr;
 	}
 
@@ -286,10 +296,13 @@ public class EditorPane extends SplitPane {
 	protected void removeNode() {
 		CustomTextTreeItem tr = (CustomTextTreeItem) treeView
 				.getSelectionModel().getSelectedItem();
-		if (tr != null && tr != rootNode) {
-			tr.getParent().getChildren().remove(tr);
+		if (tr != null) {
+			if (tr != rootNode) {
+				tr.getParent().getChildren().remove(tr);
+			} else {
+				clearNodes();
+			}
 		}
-
 	}
 
 	private void addNode() {
@@ -309,6 +322,7 @@ public class EditorPane extends SplitPane {
 			Unmarshaller um = context.createUnmarshaller();
 			reportXML = (ReportXML) um.unmarshal(new FileReader(inputFile));
 			rootNode = new CustomTextTreeItem(reportXML.getRootNode());
+			rootNode.setExpanded(true);
 		} catch (FileNotFoundException e) {
 			reportXML = new ReportXML();
 			rootNode = new CustomTextTreeItem("root");
@@ -319,11 +333,12 @@ public class EditorPane extends SplitPane {
 	}
 
 	public void exportReport(File outputFile) {
-		saveHtmlText();
+		saveCurrentHtmlText();
 		NodeXML n = rootNode.exportNodeXML();
 		reportXML.setRootNode(n);
 		try {
 			Marshaller m = context.createMarshaller();
+			m.setProperty(Marshaller.JAXB_ENCODING, "ASCII");
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			m.marshal(reportXML, outputFile);
 
@@ -334,7 +349,7 @@ public class EditorPane extends SplitPane {
 	}
 
 	public void exportReportToDoc(File file) {
-		saveHtmlText();
+		saveCurrentHtmlText();
 		NodeXML n = rootNode.exportNodeXML();
 		reportXML.setRootNode(n);
 		Docx4jDocxGenerator docGenerator = new Docx4jDocxGenerator();

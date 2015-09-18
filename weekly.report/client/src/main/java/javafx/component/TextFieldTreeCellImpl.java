@@ -23,6 +23,7 @@ public class TextFieldTreeCellImpl extends TreeCell<String> implements Serializa
 			createTextField();
 		}
 		setText(null);
+		textField.setText(getString());
 		setGraphic(textField);
 		textField.selectAll();
 	}

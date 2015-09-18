@@ -4,7 +4,7 @@
 
   <groupId>com.inu4g0t</groupId>
   <artifactId>weekly.report</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>weekly.report</name>
