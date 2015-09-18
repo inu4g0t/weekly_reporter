@@ -6,7 +6,7 @@
             <level>1</level>
             <text>TestNode 1</text>
         </child>
-        <htmlText>&lt;html dir="ltr"&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable="true"&gt;&lt;p&gt;&lt;font face="Segoe UI"&gt;123&lt;/font&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</htmlText>
+        <htmlText>&lt;html dir="ltr"&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable="true"&gt;&lt;p&gt;&lt;font face="Segoe UI"&gt;&lt;font color="#ff6666"&gt;1&lt;/font&gt;23&lt;/font&gt;&lt;/p&gt;&lt;p&gt;&lt;font face="Segoe UI"&gt;&lt;br&gt;&lt;/font&gt;&lt;/p&gt;&lt;p&gt;&lt;hr&gt;&lt;p&gt;&lt;font face="Segoe UI" color="#e64d4d" style="background-color: rgb(255, 255, 77);"&gt;&lt;u&gt;&lt;strike&gt;&lt;i&gt;&lt;b&gt;dawawddwa&lt;/b&gt;&lt;/i&gt;&lt;/strike&gt;&lt;/u&gt;&lt;/font&gt;&lt;/p&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</htmlText>
         <level>0</level>
         <text>&#36816;&#33829;&#20135;&#21697;&#30740;&#21457;&#22242;&#38431;&#21608;&#25253;</text>
     </rootNode>

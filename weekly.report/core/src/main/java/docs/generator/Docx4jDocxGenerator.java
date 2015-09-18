@@ -1,6 +1,7 @@
 package docs.generator;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,6 +16,7 @@ import javax.xml.bind.JAXBException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.tools.ant.filters.StringInputStream;
 import org.docx4j.XmlUtils;
 import org.docx4j.convert.in.xhtml.XHTMLImporterImpl;
 import org.docx4j.jaxb.Context;
@@ -40,6 +42,8 @@ import org.docx4j.wml.PPrBase.NumPr.Ilvl;
 import org.docx4j.wml.PPrBase.NumPr.NumId;
 import org.docx4j.wml.TblPr;
 import org.docx4j.wml.TblWidth;
+import org.w3c.dom.Document;
+import org.w3c.tidy.Tidy;
 
 import po.NodeXML;
 import po.ReportXML;
@@ -57,9 +61,9 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 	static final String defaultNumberingXML = "numbering.xml";
 
 	static final String defaultParagraphXML = "paragraph.xml";
-
-	private final static String dtd = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
-			+ " \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
+//
+//	private final static String dtd = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
+//			+ " \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
 
 	private String titleXMLTemplate;
 	private String numberingXML;
@@ -110,14 +114,12 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 		}
 	}
 
-	private void parseNode(WordprocessingMLPackage wordMLPackage,
-			NodeXML node) throws Docx4JException {
+	private void parseNode(WordprocessingMLPackage wordMLPackage, NodeXML node)
+			throws Docx4JException {
 		XWPFParagraph tmpPara;
 		switch (node.getLevel()) {
 		case 0:
-			wordMLPackage
-					.getMainDocumentPart()
-					.getContent()
+			wordMLPackage.getMainDocumentPart().getContent()
 					.add(createTitleWithTemplate((String) node.getText()));
 			break;
 
@@ -198,13 +200,14 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 		p.getContent().add(run);
 
 		org.docx4j.wml.PPr ppr = factory.createPPr();
-		
+
 		Spacing sp = new Spacing();
 		sp.setBeforeLines(BigInteger.valueOf(50));
 		sp.setAfterLines(BigInteger.valueOf(50));
-		
-		ppr.setSpacing(sp);;
-		
+
+		ppr.setSpacing(sp);
+		;
+
 		p.setPPr(ppr);
 
 		// Create and add <w:numPr>
@@ -228,18 +231,32 @@ public class Docx4jDocxGenerator implements DocxGenerator {
 	private void addHTMLParagraph(WordprocessingMLPackage wordMLPackage,
 			long ilvl, String htmlParagraph) throws Docx4JException {
 
+
+		Tidy tidy = new Tidy();
+		tidy.setShowWarnings(true);
+		tidy.setInputEncoding("UTF-8");
+        tidy.setOutputEncoding("UTF-8");
+        tidy.setXHTML(true);
+        tidy.setMakeClean(true);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		Document xmlDoc = tidy.parseDOM(new StringInputStream(htmlParagraph), bos);
+		htmlParagraph = bos.toString();
+		
 		XHTMLImporterImpl XHTMLImporter = new XHTMLImporterImpl(wordMLPackage);
 
-		htmlParagraph = htmlParagraph.replaceAll("<br>", "<br/>");
-
-		List<Object> importedObjects = XHTMLImporter.convert(dtd
-				+ htmlParagraph, null);
+		// htmlParagraph = htmlParagraph.replaceAll("<br>", "<br/>");
+        
+		List<Object> importedObjects = XHTMLImporter.convert(htmlParagraph, null);
 
 		for (Object o : importedObjects) {
 			if (o instanceof P) {
 				PPr ppr = ((P) o).getPPr();
 				Ind ind = new Ind();
 				ind.setLeft(BigInteger.valueOf(360 * ilvl));
+				if (ppr == null) {
+					ppr = factory.createPPr();
+					((P) o).setPPr(ppr);
+				}
 				ppr.setInd(ind);
 				wordMLPackage.getMainDocumentPart().addObject(o);
 				for (Object c : ((P) o).getContent()) {
