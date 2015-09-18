@@ -43,7 +43,7 @@ public class MainPane extends SplitPane {
 	}
 
 	private void initEditorPane() {
-		editorPane = new EditorPane();
+		editorPane = new EditorPane(new File(REPORT_XML));
 	}
 
 	private void initControlPane() {
@@ -51,7 +51,6 @@ public class MainPane extends SplitPane {
 		Button saveBtn = new Button();
 		saveBtn.setText("Save");
 		saveBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
 			public void handle(ActionEvent event) {
 				editorPane.exportReport(new File(REPORT_XML));
 			}
@@ -59,7 +58,6 @@ public class MainPane extends SplitPane {
 		Button exportBtn = new Button();
 		exportBtn.setText("Export");
 		exportBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
 			public void handle(ActionEvent event) {
 				File file = fileChooser.showSaveDialog(stage);
 				if (file != null) {

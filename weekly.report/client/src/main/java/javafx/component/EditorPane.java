@@ -109,7 +109,6 @@ public class EditorPane extends SplitPane {
 		treeView.setEditable(true);
 		treeView.setCellFactory(new Callback<TreeView<String>, TreeCell<String>>() {
 
-			@Override
 			public TreeCell<String> call(TreeView<String> arg0) {
 				// TODO Auto-generated method stub
 				TextFieldTreeCellImpl treeCell = new TextFieldTreeCellImpl();

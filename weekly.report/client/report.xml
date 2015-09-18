@@ -5,7 +5,10 @@
             <level>1</level>
             <text>TestNode 1</text>
         </child>
-        <htmlText>&lt;html dir="ltr"&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable="true"&gt;&lt;/body&gt;&lt;/html&gt;</htmlText>
+        <child>
+            <level>1</level>
+            <text>TestNode 1</text>
+        </child>
         <level>0</level>
         <text>root</text>
     </rootNode>
