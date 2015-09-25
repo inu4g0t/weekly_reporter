@@ -16,6 +16,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeCell;
@@ -24,6 +26,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
@@ -110,6 +113,26 @@ public class EditorPane extends SplitPane {
 		scrollPane = new ScrollPane();
 		scrollPane.setContent(treeView);
 		treeView.setEditable(true);
+
+		ContextMenu cm = new ContextMenu();
+		MenuItem addMenu = new MenuItem("Add");
+		addMenu.setOnAction((ActionEvent e) -> {
+			addNode();
+		});
+		MenuItem removeMenu = new MenuItem("Remove");
+		removeMenu.setOnAction((ActionEvent e) -> {
+			removeNode();
+		});
+		MenuItem moveupMenu = new MenuItem("Move Up");
+		moveupMenu.setOnAction((ActionEvent e) -> {
+			moveNode(-1);
+		});
+		MenuItem movedownMenu = new MenuItem("Move Down");
+		movedownMenu.setOnAction((ActionEvent e) -> {
+			moveNode(1);
+		});
+		cm.getItems().addAll(addMenu, removeMenu, moveupMenu, movedownMenu);
+
 		treeView.setCellFactory(new Callback<TreeView<String>, TreeCell<String>>() {
 
 			public TreeCell<String> call(TreeView<String> arg0) {
@@ -120,13 +143,24 @@ public class EditorPane extends SplitPane {
 
 					@Override
 					public void handle(MouseEvent event) {
-						saveHtmlText(lastNode);
-						CustomTextTreeItem tr = (CustomTextTreeItem) treeView
-								.getSelectionModel().getSelectedItem();
-						if (tr != null) {
-							htmlPane.setHtmlText(tr.getHtmlText());
+
+						if (event.getButton() == MouseButton.PRIMARY) {
+
+							saveHtmlText(lastNode);
+							CustomTextTreeItem tr = (CustomTextTreeItem) treeView
+									.getSelectionModel().getSelectedItem();
+							if (tr != null) {
+								if (tr.getHtmlText() != null) {
+									htmlPane.setHtmlText(tr.getHtmlText());
+								}else {
+									htmlPane.setHtmlText("");
+								}
+							}
+							lastNode = tr;
+						} else if (event.getButton() == MouseButton.SECONDARY) {
+							cm.show(treeView, event.getScreenX(),
+									event.getScreenY());
 						}
-						lastNode = tr;
 					}
 
 				});
